@@ -1,5 +1,5 @@
 """
-file_consumer_case.py
+consumer_stancil.py
 
 Consume json messages from a live data file. 
 Insert the processed messages into a database.
