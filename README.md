@@ -344,3 +344,10 @@ See the [LICENSE](LICENSE.txt) file for more.
 - Ruff by Astral Software (Linter + Formatter)
 - **SQLite Viewer by Florian Klampfer**
 - WSL by Microsoft (on Windows Machines)
+
+
+## New Files 
+
+Consumer_Stancil.py -- This is the main consumer file for the project
+
+Analysis_Category_Trends.py -- This file analyzes the categories and the frequency over time. I run this after I generated 150 messages and processed them into an SQLite database
