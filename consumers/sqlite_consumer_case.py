@@ -142,6 +142,35 @@ def delete_message(message_id: int, db_path: pathlib.Path) -> None:
     except Exception as e:
         logger.error(f"ERROR: Failed to delete message from the database: {e}")
 
+#####################################
+# Define Function to get catergory count over time
+#####################################
+
+def get_category_counts_over_time(sql_path, interval="day"):
+    import sqlite3
+    conn = sqlite3.connect(sql_path)
+    cursor = conn.cursor()
+
+    if interval == "day":
+        time_group = "strftime('%Y-%m-%d', timestamp)"
+    elif interval == "week":
+        time_group = "strftime('%Y-%W', timestamp)"
+    elif interval == "month":
+        time_group = "strftime('%Y-%m', timestamp)"
+    else:
+        raise ValueError("Invalid interval")
+
+    query = f"""
+        SELECT {time_group} as period, category, COUNT(*) as count
+        FROM streamed_messages
+        GROUP BY period, category
+        ORDER BY period ASC;
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
 
 #####################################
 # Define main() function for testing
@@ -150,7 +179,7 @@ def main():
     logger.info("Starting db testing.")
 
     # Use config to make a path to a parallel test database
-    DATA_PATH: pathlib.path = config.get_base_data_path
+    DATA_PATH: pathlib.path = config.get_base_data_path()
     TEST_DB_PATH: pathlib.Path = DATA_PATH / "test_buzz.sqlite"
 
     # Initialize the SQLite database by passing in the path
